@@ -1,4 +1,4 @@
-/*
+
 
 //1) Use SerializeField instead of public for Encapsulation:
 
@@ -112,5 +112,3 @@ transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime 
 
 
 
-
-*/
