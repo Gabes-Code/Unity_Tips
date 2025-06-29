@@ -1,5 +1,4 @@
 
-
 //1) Use SerializeField instead of public for Encapsulation:
 
 [SerializeField] private float moveSpeed = 5f;
@@ -108,7 +107,38 @@ if (collision.gameObject.CompareTag("Enemy")) {
 // 15) Lerp for Smooth Transitions
 transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * smoothSpeed);
 
+// 16) Use Singleton Pattern Safely
+public class GameManager : MonoBehaviour {
+    public static GameManager Instance { get; private set; }
+    void Awake() {
+        if (Instance == null) {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else {
+            Destroy(gameObject);
+        }
+    }
+}
 
+// 17) Handle Input Using the New Input System
+public class PlayerInputHandler : MonoBehaviour {
+    public void OnJump(InputAction.CallbackContext ctx) {
+        if (ctx.performed) Jump();
+    }
+    void Jump() {
+        Debug.Log("Jumped!");
+    }
+}
 
+// 18) Use Mathf.Clamp to Limit Values
+health = Mathf.Clamp(health, 0, maxHealth);
 
+// 19) Use Camera.main Sparingly - Cache It
+ private Camera cam;
+void Start() {
+    cam = Camera.main;
+}
+
+// 20) Batch Draw Calls with Static Batching
+    // Mark non-moving objects as static in the Inspector
 
