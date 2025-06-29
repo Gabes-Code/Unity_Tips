@@ -1,9 +1,116 @@
-1) Use SerializeField instead of public for Encapsulation:
+/*
+
+//1) Use SerializeField instead of public for Encapsulation:
 
 [SerializeField] private float moveSpeed = 5f;
 // Accessible in Inspector but still private
 
-2) Cache Components for Performance
+//2) Cache Components for Performance
 
 private Rigidbody rb;
 void Awake() => rb = GetComponent<Rigidbody>();
+
+//3) Use Time.deltaTime for Frame-Independent Movement
+
+transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+//4) Use Object Pooling for Bullets and Enemies
+public class ObjectPool : MonoBehaviour {
+    public GameObject prefab;
+    private Queue<GameObject> pool = new();
+
+    public GameObject Get() {
+        if (pool.Count == 0)
+            AddToPool(1);
+        var obj = pool.Dequeue();
+        obj.SetActive(true);
+        return obj;
+    }
+
+    public void Return(GameObject obj) {
+        obj.SetActive(false);
+        pool.Enqueue(obj);
+    }
+
+    private void AddToPool(int count) {
+        for (int i = 0; i < count; i++) {
+            var obj = Instantiate(prefab);
+            obj.SetActive(false);
+            pool.Enqueue(obj);
+        }
+    }
+}
+
+// 5) Use ScriptableObjects for Configs and Data
+[CreateAssetMenu(fileName = "EnemyData", menuName = "Data/Enemy")]
+public class EnemyData : ScriptableObject {
+    public float health;
+    public float speed;
+}
+
+// 6) Draw Debug Lines in the Scene
+void Update() {
+    Debug.DrawLine(transform.position, transform.position + transform.forward * 2, Color.red);
+}
+
+// 7) Use Physics.Raycast to Detect Objects
+if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 100f)) {
+    Debug.Log("Hit: " + hit.collider.name);
+}
+
+
+// 8) Use OnDrawGizmos() to Visualize Ranges
+void OnDrawGizmos() {
+    Gizmos.color = Color.green;
+    Gizmos.DrawWireSphere(transform.position, 5f);
+}
+
+// 9) Coroutines for Timing
+IEnumerator Flash() {
+    GetComponent<Renderer>().enabled = false;
+    yield return new WaitForSeconds(0.2f);
+    GetComponent<Renderer>().enabled = true;
+}
+
+// 10) Use LayerMask to Filter Raycasts
+public LayerMask groundMask;
+if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 10f, groundMask)) {
+    Debug.Log("Hit ground!");
+}
+
+
+// 11) Create Custom Inspectors
+#if UNITY_EDITOR
+using UnityEditor;
+[CustomEditor(typeof(MyScript))]
+public class MyScriptEditor : Editor {
+    public override void OnInspectorGUI() {
+        DrawDefaultInspector();
+        if (GUILayout.Button("Custom Button"))
+            Debug.Log("Button Clicked");
+    }
+}
+#endif
+
+// 12) Use DontDestroyOnLoad for Persistent Objects
+void Awake() {
+    DontDestroyOnLoad(gameObject);
+}
+
+// 13) Use Tags Efficiently
+if (collision.gameObject.CompareTag("Enemy")) {
+    Destroy(collision.gameObject);
+}
+
+// 14) if (Application.isEditor)
+    Debug.Log("Running in the Editor");
+
+// 15) Lerp for Smooth Transitions
+transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * smoothSpeed);
+
+
+
+
+
+
+*/
