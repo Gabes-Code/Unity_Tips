@@ -1,0 +1,9 @@
+1) Use SerializeField instead of public for Encapsulation:
+
+[SerializeField] private float moveSpeed = 5f;
+// Accessible in Inspector but still private
+
+2) Cache Components for Performance
+
+private Rigidbody rb;
+void Awake() => rb = GetComponent<Rigidbody>();
